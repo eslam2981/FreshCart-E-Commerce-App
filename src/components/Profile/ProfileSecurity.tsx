@@ -1,46 +1,82 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect } from "react";
 import { useSession } from "next-auth/react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import {
   updateLoggedUserData,
   updateLoggedUserPassword,
 } from "@/services/user.service";
 import { toast } from "@/components/ui/toast";
-import { UserCheck, KeyRound, Loader2 } from "lucide-react";
+import { UserCheck, KeyRound, Loader2, AlertCircle } from "lucide-react";
+import {
+  updateProfileSchema,
+  changePasswordSchema,
+  type UpdateProfileValues,
+  type ChangePasswordValues,
+} from "@/schemas/auth.schema";
 
 export default function ProfileSecurity() {
   const { data: session, update } = useSession();
   const token = session?.token;
   const user = session?.user;
 
-  // Profile data state
-  const [name, setName] = useState(user?.name || "");
-  const [email, setEmail] = useState(user?.email || "");
-  const [phone, setPhone] = useState((user as { phone?: string })?.phone || "");
-  const [isUpdatingProfile, setIsUpdatingProfile] = useState(false);
+  // Profile Form
+  const {
+    register: registerProfile,
+    handleSubmit: handleProfileSubmit,
+    reset: resetProfile,
+    formState: { errors: profileErrors, isSubmitting: isUpdatingProfile },
+  } = useForm<UpdateProfileValues>({
+    resolver: zodResolver(updateProfileSchema),
+    defaultValues: {
+      name: user?.name || "",
+      email: user?.email || "",
+      phone: (user as { phone?: string })?.phone || "",
+    },
+    mode: "onChange",
+  });
 
-  // Password state
-  const [currentPassword, setCurrentPassword] = useState("");
-  const [newPassword, setNewPassword] = useState("");
-  const [rePassword, setRePassword] = useState("");
-  const [isUpdatingPassword, setIsUpdatingPassword] = useState(false);
+  // Keep form in sync when session loads
+  useEffect(() => {
+    if (user) {
+      resetProfile({
+        name: user.name || "",
+        email: user.email || "",
+        phone: (user as { phone?: string })?.phone || "",
+      });
+    }
+  }, [user, resetProfile]);
 
-  const handleUpdateProfile = async (e: React.FormEvent) => {
-    e.preventDefault();
+  // Password Form
+  const {
+    register: registerPassword,
+    handleSubmit: handlePasswordSubmit,
+    reset: resetPassword,
+    formState: { errors: passwordErrors, isSubmitting: isUpdatingPassword },
+  } = useForm<ChangePasswordValues>({
+    resolver: zodResolver(changePasswordSchema),
+    defaultValues: {
+      currentPassword: "",
+      password: "",
+      rePassword: "",
+    },
+    mode: "onChange",
+  });
+
+  const onUpdateProfile = async (data: UpdateProfileValues) => {
     if (!token) return;
 
     try {
-      setIsUpdatingProfile(true);
-
       const payload: { name: string; phone: string; email?: string } = {
-        name: name.trim(),
-        phone: phone.trim(),
+        name: data.name.trim(),
+        phone: data.phone.trim(),
       };
 
       // Only send email if user updated it (avoids Route API email duplicate check bug)
-      if (email.trim() && email.trim().toLowerCase() !== user?.email?.toLowerCase()) {
-        payload.email = email.trim();
+      if (data.email.trim().toLowerCase() !== user?.email?.toLowerCase()) {
+        payload.email = data.email.trim();
       }
 
       const res = await updateLoggedUserData(payload, token);
@@ -73,28 +109,19 @@ export default function ProfileSecurity() {
         description: "Something went wrong while updating profile.",
         timeout: 3000,
       });
-    } finally {
-      setIsUpdatingProfile(false);
     }
   };
 
-  const handleChangePassword = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const onChangePassword = async (data: ChangePasswordValues) => {
     if (!token) return;
 
-    if (newPassword !== rePassword) {
-      toast.add({
-        type: "error",
-        description: "New passwords do not match.",
-        timeout: 3000,
-      });
-      return;
-    }
-
     try {
-      setIsUpdatingPassword(true);
       const res = await updateLoggedUserPassword(
-        { currentPassword, password: newPassword, rePassword },
+        {
+          currentPassword: data.currentPassword,
+          password: data.password,
+          rePassword: data.rePassword,
+        },
         token
       );
 
@@ -104,9 +131,7 @@ export default function ProfileSecurity() {
           description: "Password changed successfully!",
           timeout: 3000,
         });
-        setCurrentPassword("");
-        setNewPassword("");
-        setRePassword("");
+        resetPassword();
       } else {
         const errorMsg =
           (Array.isArray(res.errors) ? res.errors[0]?.msg : (res.errors as { msg?: string })?.msg) ||
@@ -126,8 +151,6 @@ export default function ProfileSecurity() {
         description: "Something went wrong while changing password.",
         timeout: 3000,
       });
-    } finally {
-      setIsUpdatingPassword(false);
     }
   };
 
@@ -146,18 +169,26 @@ export default function ProfileSecurity() {
             </div>
           </div>
 
-          <form onSubmit={handleUpdateProfile} className="mt-6 space-y-4">
+          <form onSubmit={handleProfileSubmit(onUpdateProfile)} className="mt-6 space-y-4">
             <div>
               <label className="block text-xs font-semibold text-slate-700 mb-1">
                 Full Name
               </label>
               <input
                 type="text"
-                required
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                className="w-full h-11 px-3.5 text-xs sm:text-sm rounded-xl border border-slate-200 bg-slate-50/50 focus:bg-white focus:outline-none focus:border-emerald-500 transition-all"
+                {...registerProfile("name")}
+                className={`w-full h-11 px-3.5 text-xs sm:text-sm rounded-xl border ${
+                  profileErrors.name
+                    ? "border-rose-400 focus:border-rose-500"
+                    : "border-slate-200 focus:border-emerald-500"
+                } bg-slate-50/50 focus:bg-white focus:outline-none transition-all`}
               />
+              {profileErrors.name && (
+                <p className="text-xs text-rose-500 font-medium mt-1 flex items-center gap-1">
+                  <AlertCircle className="w-3.5 h-3.5 shrink-0" />
+                  <span>{profileErrors.name.message}</span>
+                </p>
+              )}
             </div>
 
             <div>
@@ -166,24 +197,41 @@ export default function ProfileSecurity() {
               </label>
               <input
                 type="email"
-                required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="w-full h-11 px-3.5 text-xs sm:text-sm rounded-xl border border-slate-200 bg-slate-50/50 focus:bg-white focus:outline-none focus:border-emerald-500 transition-all"
+                {...registerProfile("email")}
+                className={`w-full h-11 px-3.5 text-xs sm:text-sm rounded-xl border ${
+                  profileErrors.email
+                    ? "border-rose-400 focus:border-rose-500"
+                    : "border-slate-200 focus:border-emerald-500"
+                } bg-slate-50/50 focus:bg-white focus:outline-none transition-all`}
               />
+              {profileErrors.email && (
+                <p className="text-xs text-rose-500 font-medium mt-1 flex items-center gap-1">
+                  <AlertCircle className="w-3.5 h-3.5 shrink-0" />
+                  <span>{profileErrors.email.message}</span>
+                </p>
+              )}
             </div>
 
             <div>
               <label className="block text-xs font-semibold text-slate-700 mb-1">
-                Phone Number
+                Phone Number (e.g. 01012345678)
               </label>
               <input
                 type="tel"
-                value={phone}
-                onChange={(e) => setPhone(e.target.value)}
                 placeholder="01012345678"
-                className="w-full h-11 px-3.5 text-xs sm:text-sm rounded-xl border border-slate-200 bg-slate-50/50 focus:bg-white focus:outline-none focus:border-emerald-500 transition-all"
+                {...registerProfile("phone")}
+                className={`w-full h-11 px-3.5 text-xs sm:text-sm rounded-xl border ${
+                  profileErrors.phone
+                    ? "border-rose-400 focus:border-rose-500"
+                    : "border-slate-200 focus:border-emerald-500"
+                } bg-slate-50/50 focus:bg-white focus:outline-none transition-all`}
               />
+              {profileErrors.phone && (
+                <p className="text-xs text-rose-500 font-medium mt-1 flex items-center gap-1">
+                  <AlertCircle className="w-3.5 h-3.5 shrink-0" />
+                  <span>{profileErrors.phone.message}</span>
+                </p>
+              )}
             </div>
 
             <div className="pt-2">
@@ -213,33 +261,49 @@ export default function ProfileSecurity() {
             </div>
           </div>
 
-          <form onSubmit={handleChangePassword} className="mt-6 space-y-4">
+          <form onSubmit={handlePasswordSubmit(onChangePassword)} className="mt-6 space-y-4">
             <div>
               <label className="block text-xs font-semibold text-slate-700 mb-1">
                 Current Password
               </label>
               <input
                 type="password"
-                required
-                value={currentPassword}
-                onChange={(e) => setCurrentPassword(e.target.value)}
                 placeholder="••••••••"
-                className="w-full h-11 px-3.5 text-xs sm:text-sm rounded-xl border border-slate-200 bg-slate-50/50 focus:bg-white focus:outline-none focus:border-emerald-500 transition-all"
+                {...registerPassword("currentPassword")}
+                className={`w-full h-11 px-3.5 text-xs sm:text-sm rounded-xl border ${
+                  passwordErrors.currentPassword
+                    ? "border-rose-400 focus:border-rose-500"
+                    : "border-slate-200 focus:border-emerald-500"
+                } bg-slate-50/50 focus:bg-white focus:outline-none transition-all`}
               />
+              {passwordErrors.currentPassword && (
+                <p className="text-xs text-rose-500 font-medium mt-1 flex items-center gap-1">
+                  <AlertCircle className="w-3.5 h-3.5 shrink-0" />
+                  <span>{passwordErrors.currentPassword.message}</span>
+                </p>
+              )}
             </div>
 
             <div>
               <label className="block text-xs font-semibold text-slate-700 mb-1">
-                New Password
+                New Password (1 Uppercase + 1 Special Character)
               </label>
               <input
                 type="password"
-                required
-                value={newPassword}
-                onChange={(e) => setNewPassword(e.target.value)}
-                placeholder="At least 6 characters"
-                className="w-full h-11 px-3.5 text-xs sm:text-sm rounded-xl border border-slate-200 bg-slate-50/50 focus:bg-white focus:outline-none focus:border-emerald-500 transition-all"
+                placeholder="••••••••"
+                {...registerPassword("password")}
+                className={`w-full h-11 px-3.5 text-xs sm:text-sm rounded-xl border ${
+                  passwordErrors.password
+                    ? "border-rose-400 focus:border-rose-500"
+                    : "border-slate-200 focus:border-emerald-500"
+                } bg-slate-50/50 focus:bg-white focus:outline-none transition-all`}
               />
+              {passwordErrors.password && (
+                <p className="text-xs text-rose-500 font-medium mt-1 flex items-center gap-1">
+                  <AlertCircle className="w-3.5 h-3.5 shrink-0" />
+                  <span>{passwordErrors.password.message}</span>
+                </p>
+              )}
             </div>
 
             <div>
@@ -248,12 +312,20 @@ export default function ProfileSecurity() {
               </label>
               <input
                 type="password"
-                required
-                value={rePassword}
-                onChange={(e) => setRePassword(e.target.value)}
-                placeholder="Confirm password"
-                className="w-full h-11 px-3.5 text-xs sm:text-sm rounded-xl border border-slate-200 bg-slate-50/50 focus:bg-white focus:outline-none focus:border-emerald-500 transition-all"
+                placeholder="••••••••"
+                {...registerPassword("rePassword")}
+                className={`w-full h-11 px-3.5 text-xs sm:text-sm rounded-xl border ${
+                  passwordErrors.rePassword
+                    ? "border-rose-400 focus:border-rose-500"
+                    : "border-slate-200 focus:border-emerald-500"
+                } bg-slate-50/50 focus:bg-white focus:outline-none transition-all`}
               />
+              {passwordErrors.rePassword && (
+                <p className="text-xs text-rose-500 font-medium mt-1 flex items-center gap-1">
+                  <AlertCircle className="w-3.5 h-3.5 shrink-0" />
+                  <span>{passwordErrors.rePassword.message}</span>
+                </p>
+              )}
             </div>
 
             <div className="pt-2">

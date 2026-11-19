@@ -3,6 +3,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import {
   User,
   Package,
@@ -20,6 +21,7 @@ interface UserMenuDropdownProps {
 }
 
 export default function UserMenuDropdown({ session }: UserMenuDropdownProps) {
+  const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -183,7 +185,8 @@ export default function UserMenuDropdown({ session }: UserMenuDropdownProps) {
               onClick={async () => {
                 closeDropdown();
                 await signOut({ redirect: false });
-                window.location.href = "/";
+                router.push("/");
+                router.refresh();
               }}
               className="w-full flex items-center gap-2.5 px-3 py-2 text-xs font-medium text-red-600 rounded-xl hover:bg-red-50 hover:text-red-700 transition-colors cursor-pointer group"
               role="menuitem"

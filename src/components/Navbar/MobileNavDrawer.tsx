@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import SearchBar from "./SearchBar";
 import { navLinks } from "./NavLinks";
 import { X, Headset, User, UserPlus, Truck, Gift, LogOut, PackageCheck, Heart, ShoppingCart } from "lucide-react";
@@ -19,6 +20,7 @@ export default function MobileNavDrawer({
   onClose,
   pathname,
 }: MobileNavDrawerProps) {
+  const router = useRouter();
   const { data: session, status } = useSession();
   const isLoggedIn = status === "authenticated";
   return (
@@ -157,7 +159,8 @@ export default function MobileNavDrawer({
                 onClick={async () => {
                   onClose();
                   await signOut({ redirect: false });
-                  window.location.href = "/login";
+                  router.push("/login");
+                  router.refresh();
                 }}
                 className="flex items-center justify-center gap-2 w-full py-2.5 px-4 rounded-xl bg-red-50 hover:bg-red-100 active:bg-red-200 text-red-600 font-medium text-sm transition-colors cursor-pointer"
               >

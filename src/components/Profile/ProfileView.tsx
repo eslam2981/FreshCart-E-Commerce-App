@@ -3,6 +3,7 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useSession, signOut } from "next-auth/react";
 import { useCart } from "@/context/CartContext";
 import { useWishlist } from "@/context/WishlistContext";
@@ -23,6 +24,7 @@ import ProfileAddresses from "./ProfileAddresses";
 import ProfileSecurity from "./ProfileSecurity";
 
 export default function ProfileView() {
+  const router = useRouter();
   const { data: session, status } = useSession();
   const { cartCount } = useCart();
   const { wishlistCount } = useWishlist();
@@ -98,7 +100,8 @@ export default function ProfileView() {
             <button
               onClick={async () => {
                 await signOut({ redirect: false });
-                window.location.href = "/";
+                router.push("/");
+                router.refresh();
               }}
               className="px-4 py-2 text-xs font-semibold text-red-600 hover:text-red-700 bg-red-50 hover:bg-red-100 rounded-xl transition-colors flex items-center gap-2 cursor-pointer self-center sm:self-start"
             >

@@ -2,11 +2,13 @@
 
 import React from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Truck, Gift, Phone, Mail, User, UserPlus, LogOut } from "lucide-react";
 import { useSession, signOut } from "next-auth/react";
 import { Skeleton } from "@/components/ui/skeleton";
 
 export default function TopBar() {
+  const router = useRouter();
   const { data: session, status } = useSession();
   const isLoggedIn = status === "authenticated";
 
@@ -63,7 +65,8 @@ export default function TopBar() {
                 <button
                   onClick={async () => {
                     await signOut({ redirect: false });
-                    window.location.href = "/login";
+                    router.push("/login");
+                    router.refresh();
                   }}
                   className="flex items-center gap-1.5 text-red-500 hover:text-red-700 transition-colors cursor-pointer"
                 >

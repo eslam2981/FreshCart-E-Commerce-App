@@ -9,6 +9,7 @@ import {
 } from "@/services/address.service";
 import { Address } from "@/interfaces/address";
 import { toast } from "@/components/ui/toast";
+import { addressSchema } from "@/schemas/auth.schema";
 import { MapPin, Plus, Trash2, Loader2, Building, Phone, Home } from "lucide-react";
 
 export default function ProfileAddresses() {
@@ -59,11 +60,13 @@ export default function ProfileAddresses() {
     e.preventDefault();
     if (!token) return;
 
-    if (!formData.name || !formData.details || !formData.phone) {
+    const validation = addressSchema.safeParse(formData);
+    if (!validation.success) {
+      const errorMsg = validation.error.issues[0]?.message || "Please enter valid address information.";
       toast.add({
         type: "error",
-        description: "Please fill in all required address fields.",
-        timeout: 3000,
+        description: errorMsg,
+        timeout: 3500,
       });
       return;
     }

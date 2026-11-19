@@ -10,6 +10,7 @@ import { createCheckoutSession, createCashOrder } from "@/services/order.service
 import { getLoggedUserAddresses } from "@/services/address.service";
 import { Address } from "@/interfaces/address";
 import { toast } from "@/components/ui/toast";
+import { checkoutAddressSchema } from "@/schemas/auth.schema";
 import {
   CreditCard,
   Banknote,
@@ -96,21 +97,19 @@ export default function CheckoutView() {
       return;
     }
 
-    // Validate shipping fields
-    if (!city.trim() || !phone.trim() || !details.trim()) {
-      toast.add({
-        type: "error",
-        description: "Please fill in all shipping address fields.",
-        timeout: 3000,
-      });
-      return;
-    }
+    // Validate shipping fields using Zod and Egyptian phone regex
+    const addressValidation = checkoutAddressSchema.safeParse({
+      city: city.trim(),
+      details: details.trim(),
+      phone: phone.trim(),
+    });
 
-    if (phone.trim().length < 10) {
+    if (!addressValidation.success) {
+      const errorMsg = addressValidation.error.issues[0]?.message || "Please enter valid address information";
       toast.add({
         type: "error",
-        description: "Please enter a valid phone number (at least 10 digits).",
-        timeout: 3000,
+        description: errorMsg,
+        timeout: 3500,
       });
       return;
     }
