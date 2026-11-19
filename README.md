@@ -7,7 +7,7 @@
 [![NextAuth.js](https://img.shields.io/badge/NextAuth.js-v4-purple?style=for-the-badge&logo=next.js)](https://next-auth.js.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-emerald?style=for-the-badge)](LICENSE)
 
-A high-performance, full-featured online grocery and supermarket e-commerce platform built with **Next.js 16 (App Router & Turbopack)**, **React 19**, **Tailwind CSS v4**, and **TypeScript**. Seamlessly integrated with the Route Academy E-Commerce REST API.
+A high-performance, full-featured online grocery and supermarket e-commerce platform built with **Next.js 16 (App Router & Turbopack)**, **React 19**, **Tailwind CSS v4**, and **TypeScript**. Seamlessly integrated with a robust Cloud REST API architecture.
 
 ---
 
@@ -48,7 +48,7 @@ A high-performance, full-featured online grocery and supermarket e-commerce plat
 * **Password Management**: Secure password update from the user profile.
 
 ### 🔐 Authentication & Protection
-* **NextAuth.js Integration**: JWT strategy with custom Route REST API token synchronization.
+* **NextAuth.js Integration**: Secure JWT strategy with token synchronization and persistent session handling.
 * **Credentials & Social Login**: Email/Password authentication alongside Google OAuth 2.0.
 * **Password Recovery Flow**:
   * Step 1: Submit email to request a 6-digit reset code.
@@ -76,7 +76,7 @@ A high-performance, full-featured online grocery and supermarket e-commerce plat
 | **Form Management** | [React Hook Form](https://react-hook-form.com/) + [Zod](https://zod.dev/) |
 | **Icons & Sliders** | [Lucide React](https://lucide.dev/), [Swiper.js](https://swiperjs.com/) |
 | **UI Primitives** | [Base UI](https://base-ui.com/), Shadcn UI Tokens |
-| **API Backend** | Route E-Commerce REST API |
+| **API Backend** | Cloud REST API Architecture |
 
 ---
 
@@ -147,8 +147,8 @@ e-commerce/
 
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/your-username/e-commerce.git
-   cd e-commerce
+   git clone https://github.com/eslam2981/FreshCart-E-Commerce-App.git
+   cd FreshCart-E-Commerce-App
    ```
 
 2. **Install dependencies:**
@@ -163,7 +163,7 @@ e-commerce/
    ```
    Fill in your configuration:
    ```env
-   BASE_URL=https://ecommerce.routemisr.com
+   BASE_URL=https://your-api-domain.com
    NEXTAUTH_URL=http://localhost:3000
    NEXTAUTH_SECRET=your_nextauth_secret_run_openssl_rand_base64_32
    GOOGLE_CLIENT_ID=your_google_client_id.apps.googleusercontent.com
@@ -190,7 +190,7 @@ npm run start
 ### Deploy to Vercel
 1. Import this repository into [Vercel](https://vercel.com).
 2. Under **Project Settings ➔ Environment Variables**, add:
-   * `BASE_URL`: `https://ecommerce.routemisr.com`
+   * `BASE_URL`: *Your backend API base URL*
    * `NEXTAUTH_URL`: `https://your-app-domain.vercel.app`
    * `NEXTAUTH_SECRET`: *Your generated secret*
    * `GOOGLE_CLIENT_ID`: *Your Google OAuth Client ID*
@@ -219,5 +219,4 @@ This project is licensed under the **MIT License** — feel free to use it for p
 ## 👨‍💻 Author
 
 Crafted with ❤️ by **Eslam Gamil**
-* **Project**: Route Academy Web Development C48 E-Commerce
-* **GitHub**: [@eslamgamil](https://github.com/)
+* **GitHub**: [github.com/eslam2981](https://github.com/eslam2981)
