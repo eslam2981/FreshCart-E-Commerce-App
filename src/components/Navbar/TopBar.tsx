@@ -61,7 +61,10 @@ export default function TopBar() {
                   <span>{session?.user?.name}</span>
                 </Link>
                 <button
-                  onClick={() => signOut({ callbackUrl: "/login" })}
+                  onClick={async () => {
+                    await signOut({ redirect: false });
+                    window.location.href = "/login";
+                  }}
                   className="flex items-center gap-1.5 text-red-500 hover:text-red-700 transition-colors cursor-pointer"
                 >
                   <LogOut className="w-3.5 h-3.5 stroke-[2]" />

@@ -154,7 +154,11 @@ export default function MobileNavDrawer({
               </div>
 
               <button
-                onClick={() => { signOut({ callbackUrl: "/login" }); onClose(); }}
+                onClick={async () => {
+                  onClose();
+                  await signOut({ redirect: false });
+                  window.location.href = "/login";
+                }}
                 className="flex items-center justify-center gap-2 w-full py-2.5 px-4 rounded-xl bg-red-50 hover:bg-red-100 active:bg-red-200 text-red-600 font-medium text-sm transition-colors cursor-pointer"
               >
                 <LogOut className="w-4 h-4 stroke-[2]" />

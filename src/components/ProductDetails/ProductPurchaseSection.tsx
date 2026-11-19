@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import React, { useState } from "react";
 import { Minus, Plus, Heart, Loader2 } from "lucide-react";

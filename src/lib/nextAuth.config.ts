@@ -78,6 +78,28 @@ export const nextAuthConfig: NextAuthOptions = {
       }
       return session;
     },
+    async redirect({ url, baseUrl }) {
+      // Prevent broken https://https redirects
+      if (!baseUrl || baseUrl.includes("https://https") || baseUrl === "https://") {
+        baseUrl = process.env.NEXTAUTH_URL && !process.env.NEXTAUTH_URL.includes("https://https")
+          ? process.env.NEXTAUTH_URL
+          : (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000");
+      }
+
+      if (url.startsWith("/")) {
+        return `${baseUrl}${url}`;
+      } else if (url.startsWith("http")) {
+        try {
+          const parsed = new URL(url);
+          if (parsed.origin === baseUrl || parsed.host.includes("vercel.app") || parsed.host.includes("localhost")) {
+            return url;
+          }
+        } catch {
+          // ignore error
+        }
+      }
+      return baseUrl;
+    },
   },
 
   
