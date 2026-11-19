@@ -260,7 +260,7 @@ export default function ForgotPasswordView() {
                 required
                 value={newPassword}
                 onChange={(e) => setNewPassword(e.target.value)}
-                placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢"
+                placeholder="••••••••"
                 className="w-full h-12 pl-11 pr-4 rounded-xl border border-slate-200 bg-slate-50/70 focus:bg-white focus:border-emerald-600 focus:ring-4 focus:ring-emerald-500/15 text-sm transition-all outline-none"
               />
               <Lock className="absolute left-3.5 top-3.5 w-5 h-5 text-slate-400" />
@@ -277,7 +277,7 @@ export default function ForgotPasswordView() {
                 required
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
-                placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢"
+                placeholder="••••••••"
                 className="w-full h-12 pl-11 pr-4 rounded-xl border border-slate-200 bg-slate-50/70 focus:bg-white focus:border-emerald-600 focus:ring-4 focus:ring-emerald-500/15 text-sm transition-all outline-none"
               />
               <ShieldCheck className="absolute left-3.5 top-3.5 w-5 h-5 text-slate-400" />

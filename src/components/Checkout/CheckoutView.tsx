@@ -311,16 +311,16 @@ export default function CheckoutView() {
                         required
                         className="w-full appearance-none px-4 py-3 rounded-xl border border-slate-200 bg-white text-slate-800 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-colors cursor-pointer"
                       >
-                        <option value="Cairo">Cairo (Ø§Ù„Ù‚Ø§Ù‡Ø±Ø©)</option>
-                        <option value="Giza">Giza (Ø§Ù„Ø¬ÙŠØ²Ø©)</option>
-                        <option value="Alexandria">Alexandria (Ø§Ù„Ø¥Ø³ÙƒÙ†Ø¯Ø±ÙŠØ©)</option>
-                        <option value="Mansoura">Mansoura (Ø§Ù„Ù…Ù†ØµÙˆØ±Ø©)</option>
-                        <option value="Tanta">Tanta (Ø·Ù†Ø·Ø§)</option>
-                        <option value="Zagazig">Zagazig (Ø§Ù„Ø²Ù‚Ø§Ø²ÙŠÙ‚)</option>
-                        <option value="Assiut">Assiut (Ø£Ø³ÙŠÙˆØ·)</option>
-                        <option value="Aswan">Aswan (Ø£Ø³ÙˆØ§Ù†)</option>
-                        <option value="Hurghada">Hurghada (Ø§Ù„ØºØ±Ø¯Ù‚Ø©)</option>
-                        <option value="Sharm El Sheikh">Sharm El Sheikh (Ø´Ø±Ù… Ø§Ù„Ø´ÙŠØ®)</option>
+                        <option value="Cairo">Cairo (القاهرة)</option>
+                        <option value="Giza">Giza (الجيزة)</option>
+                        <option value="Alexandria">Alexandria (الإسكندرية)</option>
+                        <option value="Mansoura">Mansoura (المنصورة)</option>
+                        <option value="Tanta">Tanta (طنطا)</option>
+                        <option value="Zagazig">Zagazig (الزقازيق)</option>
+                        <option value="Assiut">Assiut (أسيوط)</option>
+                        <option value="Aswan">Aswan (أسوان)</option>
+                        <option value="Hurghada">Hurghada (الغردقة)</option>
+                        <option value="Sharm El Sheikh">Sharm El Sheikh (شرم الشيخ)</option>
                       </select>
                       <Building2 className="w-4 h-4 text-slate-400 absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none" />
                     </div>
@@ -427,7 +427,7 @@ export default function CheckoutView() {
                       <div className="flex items-center justify-between">
                         <span className="text-sm font-bold text-slate-900 flex items-center gap-2">
                           <Banknote className="w-4 h-4 text-emerald-600" />
-                          <span>Cash on Delivery (Ø§Ù„Ø¯ÙØ¹ Ø¹Ù†Ø¯ Ø§Ù„Ø§Ø³ØªÙ„Ø§Ù…)</span>
+                          <span>Cash on Delivery (الدفع عند الاستلام)</span>
                         </span>
                       </div>
                       <p className="text-xs text-slate-500 mt-1">
@@ -468,7 +468,7 @@ export default function CheckoutView() {
                             {item.product?.title}
                           </p>
                           <p className="text-[11px] text-slate-400">
-                            Qty: <span className="font-bold text-slate-700">{item.count}</span> Ã— {price} EGP
+                            Qty: <span className="font-bold text-slate-700">{item.count}</span> × {price} EGP
                           </p>
                         </div>
                         <span className="text-xs font-bold text-slate-900">
@@ -529,7 +529,7 @@ export default function CheckoutView() {
                     <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
                     <span>Buyer Protection</span>
                   </span>
-                  <span>â€¢</span>
+                  <span>•</span>
                   <span>Money Back Guarantee</span>
                 </div>
               </div>

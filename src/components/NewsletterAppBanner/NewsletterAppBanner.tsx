@@ -193,7 +193,7 @@ export default function NewsletterAppBanner() {
                 <span className="text-xs font-semibold text-slate-200">
                   4.9{" "}
                   <span className="text-slate-400 font-normal">
-                    Â· 100K+ downloads
+                    · 100K+ downloads
                   </span>
                 </span>
               </div>

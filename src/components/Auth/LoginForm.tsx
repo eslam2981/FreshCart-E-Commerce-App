@@ -119,7 +119,7 @@ export default function LoginForm() {
               errors={errors}
               label="Password"
               id="login-password"
-              placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢"
+              placeholder="••••••••"
               autoComplete="current-password"
               headerRight={
                 <Link

@@ -79,7 +79,7 @@ export default function ProductDetailsView({ product }: ProductDetailsViewProps)
               <span className="h-4 w-px bg-slate-200" aria-hidden="true" />
 
               <span className="text-xs font-medium text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-md">
-                ðŸ”¥ {product.sold || 0} sold
+                🔥 {product.sold || 0} sold
               </span>
             </div>
 

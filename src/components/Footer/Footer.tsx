@@ -103,7 +103,7 @@ export default function Footer() {
         </div>
 
         <div className="border-t border-slate-800/80 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-400">
-          <p>Â© 2026 FreshCart. All rights reserved.</p>
+          <p>© 2026 FreshCart. All rights reserved.</p>
 
           <div className="flex items-center gap-5 text-xs text-slate-400">
             {PAYMENT_METHODS.map((method) => (

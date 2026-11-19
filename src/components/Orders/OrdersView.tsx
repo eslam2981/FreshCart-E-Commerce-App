@@ -376,7 +376,7 @@ export default function OrdersView({ isStripeRedirect = false }: OrdersViewProps
                                 </span>
                               )}
                               <span className="text-xs text-slate-500 mt-0.5 block">
-                                Qty: <strong className="text-slate-800">{item.count}</strong> Ã—{" "}
+                                Qty: <strong className="text-slate-800">{item.count}</strong> ×{" "}
                                 {item.price} EGP
                               </span>
                             </div>

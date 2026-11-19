@@ -69,7 +69,7 @@ export default function CartSummary({
               Discount
             </span>
             <span className="font-semibold text-emerald-600 tabular-nums">
-              âˆ’ {savings.toLocaleString()} EGP
+              − {savings.toLocaleString()} EGP
             </span>
           </div>
         )}
@@ -162,7 +162,7 @@ export default function CartSummary({
       <div className="px-5 py-3 bg-slate-50/80 border-t border-slate-100 flex flex-col gap-2">
         <div className="flex items-center gap-2 text-[11px] text-slate-500 font-medium">
           <ShieldCheck className="w-3.5 h-3.5 text-emerald-500 shrink-0 stroke-[2]" />
-          Secure payment â€” SSL encrypted
+          Secure payment — SSL encrypted
         </div>
         <div className="flex items-center gap-2 text-[11px] text-slate-500 font-medium">
           <Truck className="w-3.5 h-3.5 text-emerald-500 shrink-0 stroke-[2]" />
