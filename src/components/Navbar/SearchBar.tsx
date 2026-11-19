@@ -1,10 +1,10 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Search, X } from "lucide-react";
 
-export default function SearchBar() {
+function SearchBarContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const currentKeyword = searchParams.get("keyword") || "";
@@ -68,5 +68,27 @@ export default function SearchBar() {
         <Search className="w-3.5 sm:w-4 h-3.5 sm:h-4 stroke-[2.5]" />
       </button>
     </form>
+  );
+}
+
+export default function SearchBar() {
+  return (
+    <Suspense
+      fallback={
+        <div className="relative flex items-center w-full h-10 sm:h-11 md:h-12 bg-slate-50/90 border border-slate-200/90 rounded-full shadow-xs">
+          <input
+            type="search"
+            disabled
+            placeholder="Search for products, brands and more..."
+            className="w-full h-full pl-4 sm:pl-5 md:pl-6 pr-18 sm:pr-20 text-xs sm:text-sm text-slate-400 bg-transparent rounded-full border-none outline-none"
+          />
+          <div className="absolute right-1 sm:right-1.5 w-8 sm:w-9 md:w-9.5 h-8 sm:h-9 md:h-9.5 rounded-full bg-emerald-600 flex items-center justify-center text-white">
+            <Search className="w-3.5 sm:w-4 h-3.5 sm:h-4 stroke-[2.5]" />
+          </div>
+        </div>
+      }
+    >
+      <SearchBarContent />
+    </Suspense>
   );
 }

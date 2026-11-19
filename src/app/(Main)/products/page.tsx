@@ -9,6 +9,8 @@ import ProductPagination from "@/components/Products/ProductPagination";
 import { Product, Brand } from "@/interfaces/product";
 import { PackageOpen, ChevronRight, Home as HomeIcon } from "lucide-react";
 
+export const dynamic = "force-dynamic";
+
 export const metadata = {
   title: "All Products - FreshCart Online Supermarket",
   description: "Browse our hand-picked collection of groceries, electronics, fashion, and daily essentials at FreshCart.",

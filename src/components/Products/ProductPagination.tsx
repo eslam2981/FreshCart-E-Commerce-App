@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import {
   Pagination,
@@ -17,7 +17,7 @@ interface ProductPaginationProps {
   numberOfPages: number;
 }
 
-export default function ProductPagination({
+function ProductPaginationContent({
   currentPage,
   numberOfPages,
 }: ProductPaginationProps) {
@@ -140,5 +140,13 @@ export default function ProductPagination({
         </PaginationContent>
       </Pagination>
     </div>
+  );
+}
+
+export default function ProductPagination(props: ProductPaginationProps) {
+  return (
+    <Suspense fallback={null}>
+      <ProductPaginationContent {...props} />
+    </Suspense>
   );
 }

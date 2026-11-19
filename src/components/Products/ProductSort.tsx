@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { ArrowUpDown, ChevronDown, Check } from "lucide-react";
 import {
@@ -28,7 +28,7 @@ const sortOptions = [
   { value: "-createdAt", label: "Newest Arrivals" },
 ];
 
-export default function ProductSort({
+function ProductSortContent({
   totalResults,
   currentCount,
   activeSort = "",
@@ -111,5 +111,17 @@ export default function ProductSort({
         </DropdownMenu>
       </div>
     </div>
+  );
+}
+
+export default function ProductSort(props: ProductSortProps) {
+  return (
+    <Suspense
+      fallback={
+        <div className="h-16 w-full bg-white rounded-2xl border border-slate-100 mb-6 animate-pulse" />
+      }
+    >
+      <ProductSortContent {...props} />
+    </Suspense>
   );
 }

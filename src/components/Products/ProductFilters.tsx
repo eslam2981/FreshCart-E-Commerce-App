@@ -1,6 +1,6 @@
 ﻿"use client";
 
-import { useState } from "react";
+import { useState, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { SlidersHorizontal, X, RotateCcw, Check } from "lucide-react";
 
@@ -15,7 +15,7 @@ interface ProductFiltersProps {
   totalProducts: number;
 }
 
-export default function ProductFilters({
+function ProductFiltersContent({
   categories,
   activeCategory,
   totalProducts,
@@ -172,5 +172,13 @@ export default function ProductFilters({
         </div>
       )}
     </>
+  );
+}
+
+export default function ProductFilters(props: ProductFiltersProps) {
+  return (
+    <Suspense fallback={<div className="w-full lg:w-64 h-96 bg-white rounded-2xl border border-slate-100 animate-pulse" />}>
+      <ProductFiltersContent {...props} />
+    </Suspense>
   );
 }
