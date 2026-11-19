@@ -33,6 +33,10 @@ export default function AddToCartButton({
     e.preventDefault();
     e.stopPropagation();
 
+    if (status === "loading") {
+      return;
+    }
+
     const userToken = session?.token;
     if (status === "unauthenticated" || !userToken) {
       toast.add({

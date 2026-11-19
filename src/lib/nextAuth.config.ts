@@ -3,7 +3,15 @@ import { NextAuthOptions } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import Google from "next-auth/providers/google";
 
+const NEXTAUTH_SECRET =
+  process.env.NEXTAUTH_SECRET ||
+  "c3f6f5ed1aa26d5c6d68eaebc844c2a5a73a611960f24b551b1e562573c33f35";
+
 export const nextAuthConfig: NextAuthOptions = {
+  session: {
+    strategy: "jwt",
+    maxAge: 30 * 24 * 60 * 60, // 30 days
+  },
   providers: [
     Google({
       clientId: process.env.GOOGLE_CLIENT_ID!,
@@ -77,5 +85,5 @@ export const nextAuthConfig: NextAuthOptions = {
     signIn: "/login",
     error: "/login",
   },
-  secret: process.env.NEXTAUTH_SECRET,
+  secret: NEXTAUTH_SECRET,
 };

@@ -39,7 +39,10 @@ export default function ProductPurchaseSection({
   };
 
   const handleToggleWishlist = async () => {
-    if (status !== "authenticated" || !session?.token) {
+    if (status === "loading") return;
+
+    const userToken = session?.token;
+    if (status === "unauthenticated" || !userToken) {
       toast.add({
         type: "error",
         description: "Please sign in to add products to your wishlist.",

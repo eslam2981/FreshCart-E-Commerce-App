@@ -1,4 +1,4 @@
-﻿import Link from "next/link";
+import Link from "next/link";
 import getAllProducts from "@/services/products.service";
 import getAllCategories from "@/services/category.service";
 import { getSingleBrand } from "@/services/brands.service";
